@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Cart - JTGeats</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        background-color: #e23744;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .cart-address {
+        font-size: 0.95rem;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 1rem;
+        color: #333;
+      }
+
+      .cart-item {
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .cart-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .cart-info {
+        flex: 1;
+      }
+
+      .cart-info h3 {
+        margin: 0 0 5px;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 5px;
+      }
+
+      .quantity-controls button {
+        background: #e23744;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .quantity-controls span {
+        min-width: 20px;
+        text-align: center;
+        display: inline-block;
+      }
+
+      .remove-btn {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #e23744;
+      }
+
+      #cart-items {
+        padding-bottom: 100px; /* For fixed footer space */
+      }
+
+      .cart-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #fff;
+        border-top: 1px solid #ddd;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 999;
+      }
+
+      .cart-total {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #1d3557;
+      }
+
+      .checkout-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #e23744;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        .cart-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .cart-item img {
+          width: 100%;
+          height: auto;
+        }
+
+        .cart-footer {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h2>🛒 Your Cart</h2>
+      <div class="cart-address">
+        <span>📍 Address: </span><span id="currentAddress">Loading...</span>
+        <br />
+        <span>🆔 User ID: </span><span id="userIdDisplay">N/A</span>
+      </div>
+    </header>
+
+    <div id="cart-items"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total" id="cart-total">Total: ₹0</div>
+      <button class="checkout-btn" onclick="proceedToBuy()">
+        Proceed to Buy
+      </button>
+    </div>
+
+    <script>
+      const sampleImages = {
+        Biryani: "asserts/biryani2.jpg",
+        "Paneer Curry": "asserts/shahi_paneer.jpg",
+        Burger: "asserts/burger.jpg",
+        Pizza: "asserts/pizza.jpg",
+        Pasta: "asserts/pasta.jpg",
+        Dosa: "https://media.istockphoto.com/id/1156896083/photo/cheese-masala-dosa-recipe-with-sambar-and-chutney-selective-focus.jpg",
+        Idli: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSd_q_aLnvh4fo0wMaDx712JYym79oXimH60w&s",
+        "Vada Pav":
+          "https://d4t7t8y8xqo0t.cloudfront.net/admin/eazymedia/trends/4067/17241433970.jpg",
+        "Chicken curry":
+          "https://myfoodstory.com/wp-content/uploads/2020/10/Dhaba-Style-Chicken-Curry-2.jpg",
+        "Fish fry":
+          "https://c.ndtvimg.com/2023-02/q8h7u3t_fish-fry_625x300_25_February_23.jpg",
+        Poha: "asserts/poha2.jpg",
+        Sandwich: "asserts/sandwich.webp",
+        "Mango Shake": "asserts/mango-shake.webp",
+        "Mountain Dew": "asserts/mountain-dew2.jpg",
+        Lassi: "asserts/lassi.webp",
+      };
+
+      function generateUserId() {
+        const id = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem("userId", id);
+        return id;
+      }
+
+      function renderCart() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const container = document.getElementById("cart-items");
+        const totalContainer = document.getElementById("cart-total");
+
+        if (cart.length === 0) {
+          container.innerHTML =
+            "<p style='text-align:center; margin: 2rem;'>Your cart is empty.</p>";
+          totalContainer.textContent = "Total: ₹0";
+          return;
+        }
+
+        let total = 0;
+        container.innerHTML = "";
+
+        cart.forEach((item, index) => {
+          total += item.price * item.quantity;
+          const imgSrc =
+            sampleImages[item.name] || "https://via.placeholder.com/80";
+
+          container.innerHTML += `
+          <div class="cart-item">
+            <img src="${imgSrc}" alt="${item.name}">
+            <div class="cart-info">
+              <h3>${item.name}</h3>
+              <p>Price: ₹${item.price} x ${item.quantity} = ₹${
+            item.price * item.quantity
+          }</p>
+              <div class="quantity-controls">
+                <button onclick="updateQuantity(${index}, -1)">➖</button>
+                <span>${item.quantity}</span>
+                <button onclick="updateQuantity(${index}, 1)">➕</button>
+              </div>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">🗑️</button>
+          </div>
+        `;
+        });
+
+        totalContainer.textContent = `Total: ₹${total}`;
+      }
+
+      function updateQuantity(index, change) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart[index].quantity = Math.max(1, cart[index].quantity + change);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+
+      function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+
+      async function proceedToBuy() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const address = localStorage.getItem("userAddress") || "N/A";
+        let userId = localStorage.getItem("userId");
+
+        // ✅ Generate one if it doesn't exist
+        if (!userId) {
+          userId = Math.floor(100000 + Math.random() * 900000);
+          localStorage.setItem("userId", userId);
+        }
+
+        const total = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+
+        const orderData = {
+          userId: parseInt(userId),
+          items: cart,
+          totalPrice: total,
+          address,
+        };
+
+        console.log("📦 Sending Order Data:", orderData);
+
+        try {
+          const response = await fetch("http://localhost:3000/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert("Order placed successfully!");
+            localStorage.removeItem("cart");
+            window.location.href = "index.html";
+          } else {
+            alert(result.message || "Failed to place order.");
+          }
+        } 
+        catch (err) {
+          console.error("❌ Order error:", err);
+          alert("Something went wrong.");
+        }
+      }
+      function loadAddress() {
+        const address =
+          localStorage.getItem("userAddress") || "No address added yet.";
+        document.getElementById("currentAddress").textContent = address;
+
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+          userId = generateUserId();
+        }
+        document.getElementById("userIdDisplay").textContent = userId;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadAddress();
+        renderCart();
+      });
+    </script>
+  </body>
+</html>
