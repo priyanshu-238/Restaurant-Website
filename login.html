@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JTGeatsLogin</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .form-container {
+      max-width: 400px;
+      margin: 5rem auto;
+      padding: 2rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    .form-container input {
+      width: 87%;
+      padding: 0.75rem;
+      padding-right: 2.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .form-container button {
+      width: 87%;
+      padding: 0.75rem;
+      background-color: #e23744;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input{
+      width: 87%;
+      padding-right: 2.5rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Login</h2>
+    <form id="loginForm" onsubmit="return loginUser()">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+
+      <div class="password-wrapper">
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <span class="toggle-password" onclick="toggleLoginPassword()">
+          <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#666">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13
+              c-2.76 0-5-2.24-5-5s2.24-5 5-5 
+              5 2.24 5 5-2.24 5-5 5zm0-8
+              c-1.66 0-3 1.34-3 3s1.34 3 
+              3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </span>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="signup.html">Signup</a></p>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    function toggleLoginPassword() {
+      const input = document.getElementById("loginPassword");
+      const icon = document.getElementById("loginEyeIcon");
+      const isVisible = input.type === "text";
+      input.type = isVisible ? "password" : "text";
+      icon.setAttribute("fill", isVisible ? "#666" : "#e23744");
+    }
+  </script>
+</body>
+</html>
