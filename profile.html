@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - JTGeats</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #addressForm {
+      display: none;
+      margin-top: 10px;
+    }
+
+    #addressInput {
+      padding: 5px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 5px;
+    }
+
+    .address-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .dots-menu-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .dots-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 25px;
+      background: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .dots-dropdown button {
+      display:block;
+      width: 100%;
+      padding: 5px 10px;
+      background: none;
+      border-radius: 20px;
+      border: 1px solid black;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .dots-dropdown button:hover {
+      background-color: #b51414;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JTGeats</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">Profile</a>
+      <h2 id="userGreeting">Welcome!</h2>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <section class="profile">
+    <h2>Your Profile</h2>
+
+    <!-- Address Section -->
+    <div class="profile-section">
+      <h3>📍 Address</h3>
+      <div class="address-container">
+        <p id="addressDisplay">No address added yet.</p>
+        <div>
+          <button id="menuBtn" class="dots-menu-btn" onclick="toggleMenu()">⋮</button>
+          <div id="dotsMenu" class="dots-dropdown">
+            <button onclick="editAddress()">✏️ Edit</button>
+            <button onclick="deleteAddress()">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+      <button id="showAddressBtn" onclick="toggleAddressForm()">➕ Add Address</button>
+      <div id="addressForm">
+        <input type="text" id="addressInput" placeholder="Enter your address" />
+        <button onclick="saveAddress()">Save Address</button>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>⚙️ Settings</h3>
+      <p>Notification preferences, Password change, etc.</p>
+    </div>
+
+    <div class="profile-section">
+      <h3>🛒 Your Orders</h3>
+      <p>You haven't placed any orders yet.</p>
+    </div>
+
+    <div class="profile-section">
+      <h3>📅 Your Bookings</h3>
+      <p>No bookings found.</p>
+    </div>
+
+    <div class="profile-section">
+      <h3>ℹ️ About</h3>
+      <p>We Deliver Best and also Drin.</p>
+    </div>
+
+    <div class="profile-section">
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 JTGeats</p>
+  </footer>
+
+  <script>
+    function greetUser() {
+      const user = JSON.parse(localStorage.getItem("loggedInUser"));
+      const greetEl = document.getElementById("userGreeting");
+      if (user && greetEl) {
+        greetEl.textContent = `Welcome, ${user.name}!`;
+      }
+    }
+
+    function toggleAddressForm() {
+      const form = document.getElementById("addressForm");
+      form.style.display = form.style.display === "block" ? "none" : "block";
+    }
+
+    function saveAddress() {
+      const address = document.getElementById("addressInput").value.trim();
+      if (address) {
+        localStorage.setItem("userAddress", address);
+        document.getElementById("addressDisplay").textContent = address;
+        document.getElementById("addressForm").style.display = "none";
+        document.getElementById("dotsMenu").style.display = "none";
+        alert("Address saved!");
+      } else {
+        alert("Please enter a valid address.");
+      }
+    }
+
+    function loadAddress() {
+      const savedAddress = localStorage.getItem("userAddress");
+      if (savedAddress) {
+        document.getElementById("addressDisplay").textContent = savedAddress;
+        document.getElementById("addressInput").value = savedAddress;
+      }
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById("dotsMenu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function editAddress() {
+      toggleMenu();
+      const currentAddress = localStorage.getItem("userAddress");
+      if (currentAddress) {
+        document.getElementById("addressInput").value = currentAddress;
+        document.getElementById("addressForm").style.display = "block";
+      }
+    }
+
+    function deleteAddress() {
+      if (confirm("Are you sure you want to delete your address?")) {
+        localStorage.removeItem("userAddress");
+        document.getElementById("addressDisplay").textContent = "No address added yet.";
+        document.getElementById("addressForm").style.display = "none";
+        toggleMenu();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("token");
+      alert("You have been logged out.");
+      window.location.href = "login.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      greetUser();
+      loadAddress();
+      document.addEventListener("click", function (e) {
+        const menu = document.getElementById("dotsMenu");
+        const button = document.getElementById("menuBtn");
+        if (!menu.contains(e.target) && e.target !== button) {
+          menu.style.display = "none";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
