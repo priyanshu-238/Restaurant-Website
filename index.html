@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JTGeats</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>JTGeats</h1>
+    <div class="search-bar">
+      <div class="location" onclick="toggleDropdown()">
+        <i class="fas fa-map-marker-alt"></i>
+        <span id="selected-location">Greater Noida</span>
+        <i class="fas fa-chevron-down"></i>
+
+        <ul class="dropdown" id="location-dropdown">
+          <li onclick="setLocation('Greater Noida')">Greater Noida</li>
+          <li onclick="setLocation('Mumbai')">Mumbai</li>
+          <li onclick="setLocation('Delhi')">Delhi</li>
+          <li onclick="setLocation('Pune')">Pune</li>
+          <li onclick="setLocation('Kanpur')">Kanpur</li>
+          <li onclick="setLocation('Patna')">Patna</li>
+          <li onclick="setLocation('Lucknow')">Lucknow</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="search-input">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search for restaurant, cuisine or a dish" />
+      </div>
+    </div>
+
+    <nav>
+      <a href="profile.html" id="profileLink">Profile</a>
+      <a href="login.html">Log in</a>
+      <a href="signup.html">Sign up</a>
+      <span id="userGreetingHome" style="margin-left: 10px; font-weight: bold;"></span>
+      <button id="viewCartBtn" style="display: none;" onclick="window.location.href='cart.html'">🛒 View Cart</button>
+    </nav>
+  </header>
+
+  <!-- Inspiration Scroll Section -->
+  <section class="inspiration-section">
+    <h2>Inspiration for your first order</h2>
+    <div class="scroll-container" id="inspirationScroll">
+      <button class="scroll-btn left" onclick="scrollLeft()">&#10094;</button>
+
+      <div class="inspiration-items">
+        <div class="inspiration-card">
+          <img src="asserts/inspiration_section/dosa.avif" alt="Dosa" />
+          <p>Dosa</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/dish_images/d9766dd91cd75416f4f65cf286ca84331634805483.png" alt="Idli" />
+          <p>Idli</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/1ab6211f526df5d920d41787907d1a051632716576.png" alt="Poha" />
+          <p>Poha</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/dish_images/ccb7dc2ba2b054419f805da7f05704471634886169.png" alt="Burger" />
+          <p>Burger</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/fc641efbb73b10484257f295ef0b9b981634401116.png" alt="Sandwich" />
+          <p>Sandwich</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/a2163bedb069e3069db0a88d7a3c848f1676534399.png" alt="Tea" />
+          <p>Tea</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/d0bd7c9405ac87f6aa65e31fe55800941632716575.png" alt="Pizza" />
+          <p>Pizza</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/2122e9de1fd26063893a1afa0dca748b1632716603.png" alt="Khichdi" />
+          <p>Khichdi</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="https://b.zmtcdn.com/data/o2_assets/3d8a2994d01ae58b54d2a6ba8a0f45b81632716549.png" alt="Vada Pav" />
+          <p>Vada Pav</p>
+        </div>
+        <div class="inspiration-card">
+          <img src="asserts/can.webp" alt="Mountain Dew" />
+          <p>Mountain Dew</p>
+        </div>
+      </div>
+
+      <button class="scroll-btn right" onclick="scrollRight()">&#10095;</button>
+    </div>
+  </section>
+
+  <!-- Restaurant Categories -->
+   <div class="restauranth3">
+    <h3>Popular Restaurants</h3>
+   </div>
+  <section class="restaurants">
+    <div class="card">South Indian</div>
+    <div class="card">North Indian</div>
+    <div class="card">Biryani</div>
+    <div class="card">Snacks</div>
+  </section>
+
+  <!-- Popular Dishes Section -->
+  <section class="food-items">
+    <h2>Popular Dishes</h2>
+    <div class="food-grid">
+      <div class="food-card" data-name="Biryani" data-price="250">
+        <img src="asserts/biryani2.jpg" alt="Biryani">
+        <h4>Biryani</h4>
+        <p>Fragrant rice with spiced meat or veggies.</p>
+        <div class="details">
+          <span class="price">₹250</span>
+          <span class="rating">4.8⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+      <div class="food-card" data-name="Paneer Curry" data-price="200">
+        <img src="asserts/shahi_paneer.jpg" alt="Paneer Curry">
+        <h4>Paneer Curry</h4>
+        <p>Soft paneer in creamy tomato gravy.</p>
+        <div class="details">
+          <span class="price">₹200</span>
+          <span class="rating">4.0⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Burger" data-price="150">
+        <img src="asserts/burger.jpg" alt="Burger">
+        <h4>Burger</h4>
+        <p>Juicy patty in a fresh bun with cheese.</p>
+        <div class="details">
+          <span class="price">₹150</span>
+          <span class="rating">4.2⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Pizza" data-price="200">
+        <img src="asserts/pizza.jpg" alt="Pizza">
+        <h4>Pizza</h4>
+        <p>Loaded with cheese and veggies/meat.</p>
+        <div class="details">
+          <span class="price">₹200</span>
+          <span class="rating">4.6⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Pasta" data-price="180">
+        <img src="asserts/pasta.jpg" alt="Pasta">
+        <h4>Pasta</h4>
+        <p>Italian-style pasta in creamy sauce.</p>
+        <div class="details">
+          <span class="price">₹180</span>
+          <span class="rating">4.3⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Dosa" data-price="120">
+        <img src="https://media.istockphoto.com/id/1156896083/photo/cheese-masala-dosa-recipe-with-sambar-and-chutney-selective-focus.jpg?s=612x612&w=0&k=20&c=Wyy0uUGXfQn7JstC8w0DsxWJVGnqWUJUCG53a42UH9s=" alt="Dosa">
+        <h4>Dosa</h4>
+        <p>Crispy Dosa with tasty Sambhar.</p>
+        <div class="details">
+          <span class="price">₹120</span>
+          <span class="rating">4.7⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+    <div class="food-card" data-name="Idli" data-price="80">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSd_q_aLnvh4fo0wMaDx712JYym79oXimH60w&s" alt="Idli">
+        <h4>Idli</h4>
+        <p>Soft tasty Idli with Sambhar and chutney.</p>
+        <div class="details">
+          <span class="price">₹80</span>
+          <span class="rating">4.4⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+    <div class="food-card" data-name="Vada Pav" data-price="180">
+        <img src="https://d4t7t8y8xqo0t.cloudfront.net/admin/eazymedia/trends/4067/17241433970.jpg" alt="Vada Pav">
+        <h4>Vada Pav</h4>
+        <p>Spicy Vada Pav with green chutney.</p>
+        <div class="details">
+          <span class="price">₹180</span>
+          <span class="rating">4.3⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+    <div class="food-card" data-name="Chicken curry" data-price="160">
+        <img src="https://myfoodstory.com/wp-content/uploads/2020/10/Dhaba-Style-Chicken-Curry-2.jpg" alt="Chicken Curry">
+        <h4>Chicken curry</h4>
+        <p>Spicy Chicken dipped in curry.</p>
+        <div class="details">
+          <span class="price">₹160</span>
+          <span class="rating">4.6⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+    <div class="food-card" data-name="Fish fry" data-price="190">
+        <img src="https://c.ndtvimg.com/2023-02/q8h7u3t_fish-fry_625x300_25_February_23.jpg" alt="Fish fry">
+        <h4>Fish fry</h4>
+        <p>marinated fish fried in moderate spices.</p>
+        <div class="details">
+          <span class="price">₹190</span>
+          <span class="rating">4.6⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+    </div>
+
+    <div class="food-card" data-name="Poha" data-price="110">
+        <img src="asserts/poha2.jpg" alt="Poha">
+        <h4>Poha</h4>
+        <p>Best Healthy Breakfast for morning.</p>
+        <div class="details">
+          <span class="price">₹110</span>
+          <span class="rating">4.7⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Sandwich" data-price="90">
+        <img src="asserts/sandwich.webp" alt="Sandwich">
+        <h4>Sandwich</h4>
+        <p>Made with fresh vegetable and with fluppy bread.</p>
+        <div class="details">
+          <span class="price">₹90</span>
+          <span class="rating">4.3⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Mango Shake" data-price="80">
+        <img src="asserts/mango-shake.webp" alt="Mango Shake">
+        <h4>Mango Shake</h4>
+        <p>Made with fresh juicy sweetend mango.</p>
+        <div class="details">
+          <span class="price">₹80</span>
+          <span class="rating">4.6⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Sandwich" data-price="60">
+        <img src="asserts/mountain-dew2.jpg" alt="Mountain Dew">
+        <h4>Mountain Dew</h4>
+        <p>Refreshing citrus soda to energize your day.</p>
+        <div class="details">
+          <span class="price">₹60</span>
+          <span class="rating">4.9⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+
+      <div class="food-card" data-name="Lassi" data-price="70">
+        <img src="asserts/lassi.webp" alt="lassi">
+        <h4>Lassi</h4>
+        <p>Sweet Lassi traditionally prepared with Curd.</p>
+        <div class="details">
+          <span class="price">₹70</span>
+          <span class="rating">4.8⭐</span>
+        </div>
+        <div class="add-cart-wrapper">
+        <button class="qty-btn" onclick="decreaseQty(this)">-</button>
+        <span class="cart-count">0</span>
+        <button class="qty-btn" onclick="increaseQty(this)">+</button>
+      </div>
+      </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer>
+    <hr class="line">
+    <p class="first">By continuing past this page, you agree to our Terms of Service, Cookie Policy, Privacy Policy and Content Policies. All trademarks are properties of their respective owners. 2008-2025 © JTGeats™ Ltd. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+
+<!-- Floating Cart Button -->
+<!-- Floating View Cart Button -->
+<a href="cart.html" id="floatingCartBtn" class="floating-cart-btn">
+  🛒 View Cart (0)
+</a>
+
+</body>
+</html>
